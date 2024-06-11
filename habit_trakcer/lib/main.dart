@@ -4,9 +4,12 @@ import 'package:habit_trakcer/pages/HomePage.dart';
 import 'package:habit_trakcer/pages/light_mode.dart';
 import 'package:habit_trakcer/pages/night_mode.dart';
 import 'package:habit_trakcer/pages/theme/theme_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('Habit_DataBase');
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(),
     child: const MyApp(),

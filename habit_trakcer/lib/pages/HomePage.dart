@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:habit_trakcer/componets/showDailogue.dart';
 import 'package:habit_trakcer/componets/floatingAction.dart';
 import 'package:habit_trakcer/componets/habittile.dart';
+import 'package:habit_trakcer/data/habit_dataBase.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -13,26 +15,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final HabitdataBase db = HabitdataBase();
   final TextEditingController controller = TextEditingController();
+  final _mybox = Hive.box('Habit_DataBase');
+
   bool ischange = false;
-  List listData = [
-    ['moringname', true],
-    ['moring', true],
-    ['mori', false]
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (_mybox.get('CURRENT_HABIT_LIST') == null) {
+      db.createDefaultData();
+    } else {
+      db.loadData();
+    }
+    db.updateDatbase();
+  }
+
   void onChangeValue(bool? bool, int index) {
     setState(() {
-      listData[index][1] = bool!;
+      db.totalHabitList[index][1] = bool!;
     });
+    db.updateDatbase();
   }
 
   void onSave() {
-    listData.add([controller.text, false]);
+    db.totalHabitList.add([controller.text, false]);
     controller.clear();
     Navigator.pop(context);
 
     setState(() {});
-    print(listData);
+    db.updateDatbase();
+    print(db.totalHabitList);
   }
 
   void onCancel() {
@@ -44,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (context) {
         return Showdailogue(
+          hitText: 'Enter your habit',
           onCancel: onCancel,
           onSaved: onSave,
           controller: controller,
@@ -57,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (context) {
         return Showdailogue(
+          hitText: db.totalHabitList[index][0],
           onCancel: onCancel,
           onSaved: () => onEditSave(index),
           controller: controller,
@@ -66,14 +82,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void onEditSave(int index) {
-    listData[index][0] = controller.text;
+    db.totalHabitList[index][0] = controller.text;
     Navigator.pop(context);
     controller.clear();
+    db.updateDatbase();
     setState(() {});
   }
 
   void delete(int position) {
-    listData.removeAt(position);
+    db.totalHabitList.removeAt(position);
+    db.updateDatbase();
     setState(() {});
   }
 
@@ -85,13 +103,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SafeArea(
           child: ListView.builder(
-        itemCount: listData.length,
+        itemCount: db.totalHabitList.length,
         itemBuilder: (context, index) {
           return Habittile(
             onDelete: (position) => delete(index),
             onEdit: (p0) => perfectEdit(index),
-            ischecked: listData[index][1],
-            name: listData[index][0],
+            ischecked: db.totalHabitList[index][1],
+            name: db.totalHabitList[index][0],
             onChanged: (p0) {
               onChangeValue(p0, index);
             },

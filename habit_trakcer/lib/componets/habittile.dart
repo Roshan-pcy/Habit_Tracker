@@ -39,7 +39,7 @@ class Habittile extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(10.r),
           decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 212, 163, 163),
+              color: Colors.purple,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           height: 80.h,
           child: Row(
@@ -50,7 +50,13 @@ class Habittile extends StatelessWidget {
                 onChanged: onChanged,
                 checkColor: const Color.fromARGB(255, 245, 248, 245),
               ),
-              Text(name)
+              Text(
+                name,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              )
             ],
           ),
         ),

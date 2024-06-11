@@ -38,6 +38,9 @@ dependencies:
   provider:
   flutter_screenutil: ^5.9.3
   flutter_slidable: ^3.1.0
+  hive:
+  hive_flutter:
+  flutter_heatmap_calendar: ^1.0.5
 
 
 dev_dependencies:
@@ -50,6 +53,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  hive_generator:
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

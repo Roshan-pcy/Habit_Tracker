@@ -4,9 +4,11 @@ class Showdailogue extends StatelessWidget {
   final TextEditingController controller;
   final Function() onSaved;
   final Function() onCancel;
+  final String hitText;
   const Showdailogue(
       {super.key,
       required this.controller,
+      required this.hitText,
       required this.onSaved,
       required this.onCancel});
 
@@ -21,6 +23,7 @@ class Showdailogue extends StatelessWidget {
         controller: controller,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
+          hintText: hitText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5),
             borderSide: const BorderSide(color: Colors.white),
