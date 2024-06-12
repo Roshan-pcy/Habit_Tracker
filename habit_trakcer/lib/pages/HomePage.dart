@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:habit_trakcer/componets/showDailogue.dart';
 import 'package:habit_trakcer/componets/floatingAction.dart';
 import 'package:habit_trakcer/componets/habittile.dart';
 import 'package:habit_trakcer/data/habit_dataBase.dart';
+import 'package:habit_trakcer/mothly/monthly.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -15,6 +15,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  DateTime dateTime = DateTime.now();
   final HabitdataBase db = HabitdataBase();
   final TextEditingController controller = TextEditingController();
   final _mybox = Hive.box('Habit_DataBase');
@@ -102,19 +103,24 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: createNewHabit,
       ),
       body: SafeArea(
-          child: ListView.builder(
-        itemCount: db.totalHabitList.length,
-        itemBuilder: (context, index) {
-          return Habittile(
-            onDelete: (position) => delete(index),
-            onEdit: (p0) => perfectEdit(index),
-            ischecked: db.totalHabitList[index][1],
-            name: db.totalHabitList[index][0],
-            onChanged: (p0) {
-              onChangeValue(p0, index);
+          child: ListView(
+        children: [
+          Monthly(datasets: {dateTime: 12}, startDate: dateTime.toString()),
+          ListView.builder(
+            itemCount: db.totalHabitList.length,
+            itemBuilder: (context, index) {
+              return Habittile(
+                onDelete: (position) => delete(index),
+                onEdit: (p0) => perfectEdit(index),
+                ischecked: db.totalHabitList[index][1],
+                name: db.totalHabitList[index][0],
+                onChanged: (p0) {
+                  onChangeValue(p0, index);
+                },
+              );
             },
-          );
-        },
+          )
+        ],
       )),
     );
   }
