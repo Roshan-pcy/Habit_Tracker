@@ -15,7 +15,7 @@ class HabitdataBase {
     _box.put('START_DAY', totdaysDateFormatted());
   }
 
-  //load data if  it already  exits
+  //load data if  it already  exit
   void loadData() {
     //if it is a new day get habit list from database
     if (_box.get(totdaysDateFormatted()) == null) {
